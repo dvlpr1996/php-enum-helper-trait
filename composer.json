@@ -1,0 +1,55 @@
+{
+    "name": "dvlpr1996/php-enum-helper-trait",
+    "description": "A PHP trait designed to simplify and enhance the functionality of enums. This package provides utility methods and features that make working with enums more intuitive and efficient. Ideal for developers looking to streamline their enum handling in PHP applications",
+    "keywords": [
+        "php",
+        "enum",
+        "trait",
+        "helper",
+        "utility",
+        "enums",
+        "php-enum",
+        "enum-trait",
+        "enum-helper",
+        "php-trait",
+        "php-utility",
+        "php-enum-helper",
+        "php-enum-utility"
+    ],
+    "homepage": "https://github.com/dvlpr1996/php-enum-helper-trait",
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.1"
+    },
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Nima",
+            "email": "nimajahanbakhshian@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/dvlpr1996/php-enum-helper-trait/issues",
+        "source": "https://github.com/dvlpr1996/php-enum-helper-trait"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.4",
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpEnumHelperTrait\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpEnumHelperTrait\\Tests\\": "Tests/Unit/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    }
+}

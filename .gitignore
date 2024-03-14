@@ -1,0 +1,11 @@
+/.idea/
+/.vscode/
+vendor/
+/tests/coverage/
+.phpunit.cache
+.phpunit.result.cache
+coverage/
+coverage-report/
+composer.lock
+.php_cs.cache
+doc/
