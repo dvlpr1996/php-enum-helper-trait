@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace PhpEnumHelperTrait;
 
+use Exception;
+use SimpleXMLElement;
+
 /**
  * Provides utility methods for handling enums in PHP.
  *
@@ -30,6 +33,8 @@ namespace PhpEnumHelperTrait;
  * @method static bool isNameExists(string $name, bool $strict = true) checks if a name exists in an enum.
  * @method static string|null getNameFromValue(int|string $value) get the enum name with enum value.
  * @method static string toJson() convert enum to json.
+ * @method static string|null toXml() Convert Enum Data To Xml.
+ * @method static array info() Return Some Information About Enum.
  */
 trait EnumHelperTrait
 {
@@ -129,7 +134,7 @@ trait EnumHelperTrait
         return empty($values) ? '' : $values[array_rand($values)];
     }
 
-     /**
+    /**
      * Return Random Enum Name
      * @return string
      */
@@ -187,22 +192,82 @@ trait EnumHelperTrait
 
     /**
      * Convert Enum To Json
-     * @return string JSON Representation Of The Enum
+     *
+     * @param integer $flags json_encode() $flag argument
+     * @param integer $depth json_encode() $depth argument
+     * @return string|null JSON Representation Of The Enum otherwise return null
      */
-    public static function toJson(): string
+    public static function toJson(int $flags = 0, int $depth = 512): ?string
     {
         $data = self::asArray();
 
         if (empty($data) && !is_array($data)) {
-            return "";
+            return null;
         }
 
-        $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $jsonData = json_encode($data, $flags, $depth);
 
         if (!is_array(json_decode($jsonData, true)) && json_last_error() !== JSON_ERROR_NONE) {
-            return "";
+            return null;
         }
 
         return $jsonData;
+    }
+
+    /**
+     * Convert Enum Data To Xml
+     *
+     * @return string|null Xml Representation Of The Enum Otherwise Return Null
+     * @throws Exception If The Xml Data Could Not Be Parsed
+     */
+    public static function toXml(): ?string
+    {
+        $data = self::asArray();
+
+        if (empty($data) || !is_array($data)) {
+            return null;
+        }
+
+        try {
+            $xml = new SimpleXMLElement('<enum/>');
+
+            if (self::isBackedEnum()) {
+                foreach ($data as $key => $value) {
+                    $value = is_string($value) ? htmlspecialchars($value) : (string)$value;
+                    $xml->addChild($key, $value);
+                }
+            }
+
+            if (self::isPureEnum()) {
+                foreach ($data as $case) {
+                    $xml->addChild('name', $case);
+                }
+            }
+
+            return $xml->asXML();
+        } catch (Exception $e) {
+            return 'Error creating SimpleXMLElement: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Return Some Information About Enum
+     *
+     * @return array
+     */
+    public static function info(): array
+    {
+        $reflectionEnum = new \ReflectionEnum(self::class);
+
+        return [
+            'name' => $reflectionEnum->getName(),
+            'type' => ($reflectionEnum->isBacked()) ? 'Backed' : 'Pure',
+            'backed_type' => (string)$reflectionEnum->getBackingType(),
+            'cases_count' => count($reflectionEnum->getCases()),
+            'traitNames' => $reflectionEnum->getTraitNames(),
+            'parent_class' => $reflectionEnum->getParentClass(),
+            'namespace' => $reflectionEnum->getNamespaceName(),
+            'user_defined' => $reflectionEnum->isUserDefined(),
+        ];
     }
 }
