@@ -270,4 +270,113 @@ trait EnumHelperTrait
             'user_defined' => $reflectionEnum->isUserDefined(),
         ];
     }
+
+    /**
+     * Filter Backed Enum Value By Prefix (case sensitive)
+     *
+     * @param integer|string $prefix
+     * @return array Return Filtered Values Otherwise Return Empty Array
+     */
+    public static function filterValuesByPrefix(int|string $prefix): array
+    {
+        $filteredArray = array_filter(self::values(), function ($value) use ($prefix) {
+            return str_contains((string)$value, (string)$prefix);
+        });
+
+        return array_values($filteredArray);
+    }
+
+    /**
+     * Filter Backed Enum Name By Prefix (case sensitive)
+     *
+     * @param integer|string $prefix
+     * @return array Return Filtered Names Otherwise Return Empty Array
+     */
+    public static function filterNamesByPrefix(string $prefix): array
+    {
+        $filteredArray = array_filter(self::names(), function ($name) use ($prefix) {
+            return str_contains($name, $prefix);
+        });
+
+        return array_values($filteredArray);
+    }
+
+    /**
+     * Filter enum values using a custom callable filter function
+     *
+     * @param callable $callableFilterFunction The custom callable filter function
+     * @return array The Filtered Enum Values Otherwise Return Empty Array
+     */
+    public static function filterValues(callable $callableFilterFunction): array
+    {
+        return array_filter(self::values(), $callableFilterFunction);
+    }
+
+    /**
+     * Filter Enum Names Using A Custom Callable Filter Function
+     *
+     * @param callable $callableFilterFunction The custom callable filter function
+     * @return array The Filtered Enum Names Otherwise Return Empty Array
+     */
+    public static function filterNames(callable $callableFilterFunction): array
+    {
+        return array_filter(self::values(), $callableFilterFunction);
+    }
+
+    /**
+     * Filter Backed Enum Values By Suffix
+     *
+     * @param integer|string $suffix
+     * @return array Return Filtered Values Otherwise Return Empty Array
+     */
+    public static function filterValuesBySuffix(int|string $suffix): array
+    {
+        $values = self::values();
+
+        if (empty($values)) {
+            return [];
+        }
+
+        $suffix = (string)$suffix;
+
+        $filteredArray = array_filter($values, function ($value) use ($suffix) {
+            $value = (string)$value;
+
+            if (strlen($value) <= 1) {
+                return stripos($value, $suffix, 0) === 0;
+            }
+
+            return stripos($value, $suffix, -strlen($suffix));
+        });
+
+        return array_values($filteredArray);
+    }
+
+    /**
+     * Filter Backed Enum Name By Suffix
+     *
+     * @param integer|string $suffix
+     * @return array Return Filtered Values Otherwise Return Empty Array
+     */
+    public static function filterNamesBySuffix(string $suffix): array
+    {
+        $names = self::names();
+
+        if (empty($names)) {
+            return [];
+        }
+
+        $suffix = (string)$suffix;
+
+        $filteredArray = array_filter($names, function ($name) use ($suffix) {
+
+            if (strlen($name) <= 1) {
+                return stripos($name, $suffix, 0) === 0;
+            }
+
+            return stripos($name, $suffix, -strlen($suffix));
+        });
+
+        return array_values($filteredArray);
+    }
 }
