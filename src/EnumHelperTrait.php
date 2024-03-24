@@ -32,14 +32,25 @@ use SimpleXMLElement;
  * @method static bool isValueExists(int|string $value, bool $strict = true) checks if a value exists in an enum.
  * @method static bool isNameExists(string $name, bool $strict = true) checks if a name exists in an enum.
  * @method static string|null getNameFromValue(int|string $value) get the enum name with enum value.
- * @method static string toJson() convert enum to json.
+ * @method static string toJson(int $flags = 0, int $depth = 512) convert enum to json.
  * @method static string|null toXml() Convert Enum Data To Xml.
  * @method static array info() Return Some Information About Enum.
+ * @method static array filterValuesByPrefix(int|string $prefix) Filter Backed Enum Value By Prefix.
+ * @method static array filterNamesByPrefix(string $prefix) Filter Backed Enum Name By Prefix.
+ * @method static array filterValues(callable $callableFilterFunction) Filter enum values using a custom callable filter function.
+ * @method static array filterNames(callable $callableFilterFunction) Filter Enum Names Using A Custom Callable Filter Function.
+ * @method static array filterValuesBySuffix(int|string $suffix) Filter Backed Enum Values By Suffix.
+ * @method static array filterNamesBySuffix(string $suffix) Filter Backed Enum Name By Suffix.
+ * @method static bool isValueIn(array|string|int $needle) Checks Whether The Needle Is In The Values.
+ * @method static bool isNotValueIn(array|string|int $needle) Checks Whether The Needle Is Not In The Values.
+ * @method static bool isNameIn(array|string $needle) Checks Whether The Needle Is In The Names.
+ * @method static bool isNotNameIn(array|string $needle) Checks Whether The Needle Is Not In The Names.
  */
 trait EnumHelperTrait
 {
     /**
      * Generates A List Of Cases On An Enum
+     *
      * @return array
      */
     public static function getAll(): array
@@ -49,6 +60,7 @@ trait EnumHelperTrait
 
     /**
      * Return Enum As Associative Array
+     *
      * @return array
      */
     public static function asArray(): array
@@ -66,6 +78,7 @@ trait EnumHelperTrait
 
     /**
      * Check Whether The Enum Is A Pure Enum
+     *
      * @return boolean
      */
     public static function isPureEnum(): bool
@@ -75,6 +88,7 @@ trait EnumHelperTrait
 
     /**
      * Check Whether The Enum Is A Backed Enum
+     *
      * @return boolean
      */
     public static function isBackedEnum(): bool
@@ -84,6 +98,7 @@ trait EnumHelperTrait
 
     /**
      * Check Whether The Enum Is Empty
+     *
      * @return boolean
      */
     public static function isEmpty(): bool
@@ -93,6 +108,7 @@ trait EnumHelperTrait
 
     /**
      * Return Random Enum Cases
+     *
      * @return object
      */
     public static function randomCase(): object
@@ -108,6 +124,7 @@ trait EnumHelperTrait
 
     /**
      * Return All Enum Values
+     *
      * @return array
      */
     public static function values(): array
@@ -117,6 +134,7 @@ trait EnumHelperTrait
 
     /**
      * Return All Enum Names
+     *
      * @return array
      */
     public static function names(): array
@@ -126,6 +144,7 @@ trait EnumHelperTrait
 
     /**
      * Return Random Enum Value
+     *
      * @return string
      */
     public static function randomValue(): string
@@ -136,6 +155,7 @@ trait EnumHelperTrait
 
     /**
      * Return Random Enum Name
+     *
      * @return string
      */
     public static function randomName(): string
@@ -146,6 +166,7 @@ trait EnumHelperTrait
 
     /**
      * Flip Enum Name And Value
+     *
      * @return array
      */
     public static function flip(): array
@@ -155,6 +176,7 @@ trait EnumHelperTrait
 
     /**
      * Checks If A Value Exists In An Enum
+     *
      * @param integer|string $value enum value to check
      * @param boolean $strict check the types of the value
      * @return boolean
@@ -166,6 +188,7 @@ trait EnumHelperTrait
 
     /**
      * Checks If A Name Exists In An Enum
+     *
      * @param integer|string $name enum name to check
      * @param boolean $strict check the types of the name
      * @return boolean
@@ -177,6 +200,7 @@ trait EnumHelperTrait
 
     /**
      * Get The Enum Name With Enum Value
+     *
      * @param integer|string $value enum value
      * @return string|null if value not exists return null, otherwise return enum name
      */
@@ -246,7 +270,7 @@ trait EnumHelperTrait
 
             return $xml->asXML();
         } catch (Exception $e) {
-            return 'Error creating SimpleXMLElement: ' . $e->getMessage();
+            throw new Exception('Error creating SimpleXMLElement: ' . $e->getMessage());
         }
     }
 
@@ -378,5 +402,61 @@ trait EnumHelperTrait
         });
 
         return array_values($filteredArray);
+    }
+
+    /**
+     * Checks Whether The Needle Is In The Values
+     *
+     * @param array|string|integer $needle
+     * @return boolean
+     */
+    public static function isValueIn(array|string|int $needle): bool
+    {
+        $values = self::values();
+
+        if (!is_array($needle)) {
+            return in_array((string)$needle, $values);
+        }
+
+        return empty(array_diff($needle, $values));
+    }
+
+    /**
+     * Checks Whether The Needle Is Not In The Values
+     *
+     * @param array|string|integer $needle
+     * @return boolean
+     */
+    public static function isNotValueIn(array|string|int $needle): bool
+    {
+        return !self::isValueIn($needle);
+    }
+
+    /**
+     * Checks Whether The Needle Is In The Names
+     *
+     * @param array|string $needle
+     * @return boolean
+     */
+    public static function isNameIn(array|string $needle): bool
+    {
+        $values = self::names();
+
+        if (is_string($needle)) {
+            return in_array($needle, $values);
+        }
+
+        return empty(array_diff($needle, $values));
+    }
+
+    /**
+     * Checks Whether The Needle Is Not In The Names
+     *
+     * @param array|string $needle
+     * @return boolean
+     */
+    public static function isNotNameIn(array|string $needle): bool
+    {
+        return !self::isNameIn($needle);
     }
 }
