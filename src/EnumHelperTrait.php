@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace dvlpr1996\PhpEnumHelperTrait;
 
-use Exception;
 use SimpleXMLElement;
+use dvlpr1996\PhpEnumHelperTrait\Exceptions\XmlException;
+use dvlpr1996\PhpEnumHelperTrait\Exceptions\JsonException;
 
 /**
  * Provides utility methods for handling enums in PHP.
@@ -121,7 +122,8 @@ trait EnumHelperTrait
             return (object)[];
         }
 
-        return $cases[array_rand($cases)];
+        $randomIndex = array_rand($cases);
+        return $cases[$randomIndex];
     }
 
     /**
@@ -231,7 +233,7 @@ trait EnumHelperTrait
      * @param integer $flags json_encode() $flag argument
      * @param integer $depth json_encode() $depth argument
      * @return string|null JSON Representation Of The Enum otherwise return null
-     * @throws Exception if unable to encode data to JSON
+     * @throws JsonException if unable to encode data to JSON
      */
     public static function toJson(int $flags = 0, int $depth = 512): ?string
     {
@@ -244,7 +246,7 @@ trait EnumHelperTrait
         $jsonData = json_encode($data, $flags, $depth);
 
         if (!is_string($jsonData) || (json_last_error() !== JSON_ERROR_NONE)) {
-            throw new Exception('Error encoding data to JSON: ' . json_last_error_msg());
+            throw new JsonException('Error encoding data to JSON: ' . json_last_error_msg());
         }
 
         return $jsonData;
@@ -254,7 +256,7 @@ trait EnumHelperTrait
      * Convert Enum Data To Xml
      *
      * @return string|null Xml Representation Of The Enum Otherwise Return Null
-     * @throws Exception If The Xml Data Could Not Be Parsed
+     * @throws XmlException If The Xml Data Could Not Be Parsed
      */
     public static function toXml(): ?string
     {
@@ -281,8 +283,8 @@ trait EnumHelperTrait
             }
 
             return $xml->asXML();
-        } catch (Exception $e) {
-            throw new Exception('Error creating SimpleXMLElement: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new XmlException('Error creating SimpleXMLElement: ' . $e->getMessage());
         }
     }
 
