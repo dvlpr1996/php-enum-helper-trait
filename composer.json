@@ -45,7 +45,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpEnumHelperTrait\\Tests\\": "Tests/Unit/"
+            "PhpEnumHelperTrait\\Tests\\": "Tests/"
         }
     },
     "scripts": {
