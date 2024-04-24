@@ -4,7 +4,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dvlpr1996/php-enum-helper-trait?style=flat)](https://packagist.org/packages/dvlpr1996/php-enum-helper-trait)
 [![Total Downloads](https://img.shields.io/packagist/dt/dvlpr1996/php-enum-helper-trait)](https://packagist.org/packages/dvlpr1996/php-enum-helper-trait)
 
-A PHP trait designed to simplify and enhance the functionality of enums. This package provides utility methods and features that make working with enums more intuitive and efficient. Ideal for developers looking to streamline their enum handling in PHP applications
+This package provides a trait designed to simplify and enhance the functionality of enums in PHP applications. It offers utility methods and features that make working with enums more intuitive and efficient, ideal for developers looking to streamline their enum handling in PHP applications.
 
 ## Requirements
 
@@ -20,6 +20,15 @@ composer require dvlpr1996/php-enum-helper-trait
 
 ## Usage
 
+```php
+use PhpEnumHelperTrait\EnumHelperTrait;
+
+enum Foo: string {
+	use EnumHelperTrait;
+
+	// Your Additional Cases, Methods And Properties...
+}
+```
 ## Documentation
 
 See the [documentation](https://github.com/dvlpr1996/php-enum-helper-trait/wiki) for detailed installation and usage instructions.
