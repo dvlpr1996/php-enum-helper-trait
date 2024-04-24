@@ -37,8 +37,6 @@ use SimpleXMLElement;
  * @method static array info() Return Some Information About Enum.
  * @method static array filterValuesByPrefix(int|string $prefix) Filter Backed Enum Value By Prefix.
  * @method static array filterNamesByPrefix(string $prefix) Filter Backed Enum Name By Prefix.
- * @method static array filterValues(callable $callableFilterFunction) Filter enum values using a custom callable filter function.
- * @method static array filterNames(callable $callableFilterFunction) Filter Enum Names Using A Custom Callable Filter Function.
  * @method static array filterValuesBySuffix(int|string $suffix) Filter Backed Enum Values By Suffix.
  * @method static array filterNamesBySuffix(string $suffix) Filter Backed Enum Name By Suffix.
  * @method static bool isValueIn(array|string|int $needle) Checks Whether The Needle Is In The Values.
@@ -67,11 +65,15 @@ trait EnumHelperTrait
     {
         $cases = self::cases();
 
+        if (empty($cases)) {
+            return [];
+        }
+
         if (self::isBackedEnum()) {
             return array_column($cases, 'value', 'name');
         }
 
-        return array_map(function ($object) {
+        return array_map(static function ($object) {
             return $object->name;
         }, $cases);
     }
@@ -147,7 +149,7 @@ trait EnumHelperTrait
      *
      * @return string
      */
-    public static function randomValue(): string
+    public static function randomValue(): string|int
     {
         $values = self::values();
         return empty($values) ? '' : $values[array_rand($values)];
@@ -171,6 +173,10 @@ trait EnumHelperTrait
      */
     public static function flip(): array
     {
+        if (self::isPureEnum()) {
+            return [];
+        }
+
         return array_flip(self::asArray());
     }
 
@@ -211,6 +217,11 @@ trait EnumHelperTrait
         }
 
         $values = self::flip();
+
+        if (empty($values)) {
+            return null;
+        }
+
         return $values[$value];
     }
 
@@ -220,19 +231,20 @@ trait EnumHelperTrait
      * @param integer $flags json_encode() $flag argument
      * @param integer $depth json_encode() $depth argument
      * @return string|null JSON Representation Of The Enum otherwise return null
+     * @throws Exception if unable to encode data to JSON
      */
     public static function toJson(int $flags = 0, int $depth = 512): ?string
     {
         $data = self::asArray();
 
-        if (empty($data) && !is_array($data)) {
+        if (empty($data) || !is_array($data)) {
             return null;
         }
 
         $jsonData = json_encode($data, $flags, $depth);
 
-        if (!is_array(json_decode($jsonData, true)) && json_last_error() !== JSON_ERROR_NONE) {
-            return null;
+        if (!is_string($jsonData) || (json_last_error() !== JSON_ERROR_NONE)) {
+            throw new Exception('Error encoding data to JSON: ' . json_last_error_msg());
         }
 
         return $jsonData;
@@ -323,28 +335,6 @@ trait EnumHelperTrait
         });
 
         return array_values($filteredArray);
-    }
-
-    /**
-     * Filter enum values using a custom callable filter function
-     *
-     * @param callable $callableFilterFunction The custom callable filter function
-     * @return array The Filtered Enum Values Otherwise Return Empty Array
-     */
-    public static function filterValues(callable $callableFilterFunction): array
-    {
-        return array_filter(self::values(), $callableFilterFunction);
-    }
-
-    /**
-     * Filter Enum Names Using A Custom Callable Filter Function
-     *
-     * @param callable $callableFilterFunction The custom callable filter function
-     * @return array The Filtered Enum Names Otherwise Return Empty Array
-     */
-    public static function filterNames(callable $callableFilterFunction): array
-    {
-        return array_filter(self::values(), $callableFilterFunction);
     }
 
     /**
