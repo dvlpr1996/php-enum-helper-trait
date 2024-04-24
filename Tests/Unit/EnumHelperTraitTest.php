@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpEnumHelperTrait\Tests;
+namespace dvlpr1996\PhpEnumHelperTrait\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PhpEnumHelperTrait\Tests\FakeEnums\PureEnum;
-use PhpEnumHelperTrait\Tests\FakeEnums\EmptyEnum;
-use PhpEnumHelperTrait\Tests\FakeEnums\BackedIntEnum;
-use PhpEnumHelperTrait\Tests\FakeEnums\BackedStringEnum;
+use dvlpr1996\PhpEnumHelperTrait\Tests\FakeEnums\PureEnum;
+use dvlpr1996\PhpEnumHelperTrait\Tests\FakeEnums\EmptyEnum;
+use dvlpr1996\PhpEnumHelperTrait\Tests\FakeEnums\BackedIntEnum;
+use dvlpr1996\PhpEnumHelperTrait\Tests\FakeEnums\BackedStringEnum;
 
 /**
  * @covers EnumHelperTrait

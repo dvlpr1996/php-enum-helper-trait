@@ -1,6 +1,6 @@
 {
     "name": "dvlpr1996/php-enum-helper-trait",
-    "description": "A PHP trait designed to simplify and enhance the functionality of enums. This package provides utility methods and features that make working with enums more intuitive and efficient. Ideal for developers looking to streamline their enum handling in PHP applications",
+    "description": "Simplify enum handling in PHP with this versatile trait. Enhance code clarity and streamline workflows with utility methods for enum management.",
     "keywords": [
         "php",
         "enum",
@@ -25,7 +25,7 @@
     "minimum-stability": "stable",
     "authors": [
         {
-            "name": "Nima",
+            "name": "nima jahan bakhshian",
             "email": "nimajahanbakhshian@gmail.com",
             "role": "Developer"
         }
@@ -40,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "PhpEnumHelperTrait\\": "src/"
+            "dvlpr1996\\PhpEnumHelperTrait\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpEnumHelperTrait\\Tests\\": "Tests/"
+            "dvlpr1996\\PhpEnumHelperTrait\\Tests\\": "Tests/"
         }
     },
     "scripts": {

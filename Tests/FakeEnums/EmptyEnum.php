@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpEnumHelperTrait\Tests\FakeEnums;
+namespace dvlpr1996\PhpEnumHelperTrait\Tests\FakeEnums;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use PhpEnumHelperTrait\EnumHelperTrait;
+use dvlpr1996\PhpEnumHelperTrait\EnumHelperTrait;
 
 enum EmptyEnum
 {

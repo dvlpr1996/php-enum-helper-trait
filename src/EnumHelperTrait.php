@@ -4,13 +4,13 @@
  * @Package: php-enum-helper-trait
  * @trait  : EnumHelperTrait
  * @Author : Nima jahan bakhshian / dvlpr1996 <nimajahanbakhshian@gmail.com>
- * @link   : https://github.com/dvlpr1996
+ * @link   : https://github.com/dvlpr1996/php-enum-helper-trait
  * @License: MIT License Copyright (c) 2024 (until present) Nima jahan bakhshian
  */
 
 declare(strict_types=1);
 
-namespace PhpEnumHelperTrait;
+namespace dvlpr1996\PhpEnumHelperTrait;
 
 use Exception;
 use SimpleXMLElement;

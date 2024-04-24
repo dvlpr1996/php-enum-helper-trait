@@ -21,7 +21,7 @@ composer require dvlpr1996/php-enum-helper-trait
 ## Usage
 
 ```php
-use PhpEnumHelperTrait\EnumHelperTrait;
+use dvlpr1996\PhpEnumHelperTrait\EnumHelperTrait;
 
 enum Foo: string {
 	use EnumHelperTrait;
